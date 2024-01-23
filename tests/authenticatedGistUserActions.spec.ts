@@ -101,19 +101,31 @@ test('Gist Read User' ,async ({page})=>{
 
 test('Gist Delete private page' ,async ({page})=>{
 
-    var deletegist = new DeleteGist(page);
-    deletegist.delete("PrivatePlayWright.txt");
-    //deletegist.delete("PlayWright.txt");
+   /* var deletegist = new DeleteGist(page);
+    deletegist.delete("PlayWright.txt");*/
     
+        // click on avatar
+        await page.locator('[class="Header-item position-relative mr-0 d-none d-md-flex"]').locator('details').locator('img').click()
+   
+        //click on your gists
+        await page.locator('.dropdown-item').first().click()
+    
+        //Search and open the gist 
+        await page.getByText("PlayWright.txt").first().click()
+       
+        // start the listener to handle the confirm dialog
+        await page.on('dialog' , async (dialogbox) => {    
+            dialogbox.accept() 
+             
+         })
+       
+           // click on delete button
+         await this.page.getByLabel('Delete this Gist').last().click()
+         //await this.page.waitForTimeout(2000)
+        
+   }
 })
 
-
-test('Gist Delete public page' ,async ({page})=>{
-
-    var deletegist = new DeleteGist(page);
-    deletegist.delete("PlayWright.txt");
-    
-})
 
 test.afterEach( async ({page}) =>{
 
@@ -122,8 +134,8 @@ test.afterEach( async ({page}) =>{
 await page.locator("//summary[@aria-label='View profile and more']//img[@alt='@kiranjacob1010']").click()
 
 //click on signout
-await page.locator('.logout-form').click()
-//await page.locator('[class="dropdown-item dropdown-signout"]').first().click()
+//await page.locator('.dropdown-item dropdown-signout').click()
+await page.locator('[class="dropdown-item dropdown-signout"]').click()
 
 
 })
